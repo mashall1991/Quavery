@@ -20,7 +20,6 @@ public class SoundVolum : MonoBehaviour {
             }
             this.audios.Play();
         }
-          
     }
 	
 	// Update is called once per frame
@@ -30,7 +29,7 @@ public class SoundVolum : MonoBehaviour {
         if(TimeCount < 0)
         {
             float value = GetAveragedVolume();
-
+            VolumToMoveManager.Instance.VolumToMove(value);
             if (ValueText) ValueText.text = string.Format("{0:0.00}", value);
             TimeCount = 0.2f;
         }
