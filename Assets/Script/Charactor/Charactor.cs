@@ -10,18 +10,19 @@ public class Charactor : MonoBehaviour {
         stop
     }
     public CharactorState CurrentState = CharactorState.stop;
+	public RectTransform RevivePoint;
     /// <summary>
     /// is on the ground
     /// </summary>
-    bool isGround;
+    public bool isGround;
     /// <summary>
     /// rigidbody
     /// </summary>
-    private Rigidbody rig;
+	private Rigidbody2D rig;
 
 	// Use this for initialization
 	void Start () {
-        rig = GetComponent<Rigidbody>();
+        rig = GetComponent<Rigidbody2D>();
 	}
     void OnEnable()
     {
@@ -46,24 +47,34 @@ public class Charactor : MonoBehaviour {
     }
 	
 	// Update is called once per frame
-	void Update () {
-        if (Input.GetKey(KeyCode.A))
-        {
-            rig.velocity = new Vector3(-10,rig.velocity.y,0);
-        }
-        if (Input.GetKey(KeyCode.D))
-        {
-            rig.velocity = new Vector3(10, rig.velocity.y, 0);
+	void Update ()
+	{
+		switch (CurrentState) {
+		case CharactorState.stop:
+			rig.velocity = Vector2.Lerp (rig.velocity, new Vector2(0,rig.velocity.y),0.5f);
+			break;
+		case CharactorState.walk:
+			rig.velocity = new Vector2 (10, rig.velocity.y);
+			break;
+		case CharactorState.Jump:
+			if (isGround) {
+				rig.AddForce (Vector2.up * 2600);
+				rig.velocity = new Vector2 (10, rig.velocity.y);
+				isGround = false;
+			}
+			break;
 
-        }
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            rig.AddForce(Vector3.up * 1000);
-        }
+		}
     }
-    void OnColliderEnter(Collider co)
+	void OnCollisionEnter2D(Collision2D co)
     {
-
+		Debug.Log ("grounded");
+		if (co.gameObject.layer == LayerMask.NameToLayer ("ground")) {
+			isGround = true;
+		}
+		if (co.gameObject.layer == LayerMask.NameToLayer ("bounds")) {
+			GetComponent<RectTransform> ().anchoredPosition = RevivePoint.anchoredPosition;
+		}
     }
 
     private void Move()

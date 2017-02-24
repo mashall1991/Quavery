@@ -21,8 +21,8 @@ public class VolumToMoveManager : Singleton<VolumToMoveManager> {
     /// <param name="volum"></param>
     public void VolumToMove(float volum)
     {
-        if(volum < 0.2f){ Stop();}
-        else if(volum >= 0.2f && volum < 0.4f) { Move();}
+        if(volum < 0.11f){ Stop();}
+        else if(volum >= 0.11f && volum < 0.5f) { Move();}
         else{ Jump();}
     }
 }

@@ -12,6 +12,7 @@ public class SoundVolum : MonoBehaviour {
 	void Start () {
         if(Microphone.devices.Length > 0)
         {
+			Debug.Log ("Setup microphone");
             audios = base.GetComponent<AudioSource>();
             audios.clip = Microphone.Start(null, true, 0x3e7, 0xac44);
             audios.loop = true;
@@ -44,6 +45,6 @@ public class SoundVolum : MonoBehaviour {
         {
             num += Mathf.Abs(num2);
         }
-        return (num / 0.256f);
+        return (num / 25.6f);
     }
 }
